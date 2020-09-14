@@ -7,6 +7,8 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+const bin_path = "../targets/alexandrium"
+
 func TestAcceptance(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Acceptance Suite")
