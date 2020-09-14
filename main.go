@@ -9,19 +9,16 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/go-chi/chi"
+	"github.com/BooleanCat/alexandrium/router"
 )
 
 func main() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
 
-	router := chi.NewRouter()
-	router.Get("/ping", ping)
-
 	server := &http.Server{
 		Addr:    ":3000",
-		Handler: router,
+		Handler: router.New(),
 	}
 
 	go func() {
@@ -38,8 +35,4 @@ func main() {
 	if err := server.Shutdown(ctx); err != nil {
 		log.Fatalf("server shutdown: %v", err)
 	}
-}
-
-func ping(w http.ResponseWriter, _ *http.Request) {
-	w.WriteHeader(http.StatusNoContent)
 }
