@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/BooleanCat/alexandrium/books"
 	"github.com/BooleanCat/alexandrium/router"
 )
 
@@ -18,7 +19,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:    ":3000",
-		Handler: router.New(),
+		Handler: router.New(booksImpl{}),
 	}
 
 	go func() {
@@ -36,3 +37,11 @@ func main() {
 		log.Fatalf("server shutdown: %v", err)
 	}
 }
+
+type booksImpl struct {}
+
+func (_ booksImpl) ByISBN(_ string) (books.Book, error) {
+	return books.Book{}, books.NotFoundError{}
+}
+
+var _ books.Books = booksImpl{}

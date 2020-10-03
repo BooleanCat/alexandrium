@@ -11,3 +11,6 @@ lint:
 
 targets/alexandrium:
 	go build -o targets/alexandrium .
+
+generate:
+	go generate ./...

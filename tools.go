@@ -2,4 +2,7 @@
 
 package tools
 
-import "github.com/onsi/ginkgo"
+import (
+	_ "github.com/onsi/ginkgo"
+	_ "github.com/maxbrunsfeld/counterfeiter/v6"
+)

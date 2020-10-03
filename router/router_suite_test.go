@@ -1,7 +1,6 @@
 package router_test
 
 import (
-	"io"
 	"net/http"
 	"testing"
 
@@ -14,8 +13,8 @@ func TestRouter(t *testing.T) {
 	RunSpecs(t, "Router Suite")
 }
 
-func newRequest(method, url string, body io.Reader) *http.Request {
-	request, err := http.NewRequest(method, url, body)
+func httpGet(url string) *http.Response {
+	response, err := http.Get(url)
 	ExpectWithOffset(1, err).NotTo(HaveOccurred())
-	return request
+	return response
 }
