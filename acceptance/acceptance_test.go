@@ -1,13 +1,17 @@
 package acceptance_test
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"os/exec"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+
+	"github.com/BooleanCat/alexandrium/books"
 )
 
 var _ = Describe("Acceptance", func() {
@@ -29,6 +33,20 @@ var _ = Describe("Acceptance", func() {
 	It("does nothing", func() {
 		Expect(true).To(BeTrue())
 	})
+
+	Describe("GET /books/9781788547383", func() {
+		It("responds with the correct book data", func() {
+			response, err := http.Get("http://127.0.0.1:3000/books/9781788547383")
+			Expect(err).NotTo(HaveOccurred())
+			defer closeIgnoreError(response.Body)
+
+			Expect(response.StatusCode).To(Equal(http.StatusOK))
+
+			var book books.Book
+			Expect(json.NewDecoder(response.Body).Decode(&book)).To(Succeed())
+			Expect(book.Name).To(Equal("Cage of Souls"))
+		})
+	})
 })
 
 func ping(url string) func() error {
@@ -44,4 +62,8 @@ func ping(url string) func() error {
 
 		return fmt.Errorf("unexpected status code: %d", response.StatusCode)
 	}
+}
+
+func closeIgnoreError(c io.Closer) {
+	_ = c.Close()
 }

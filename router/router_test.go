@@ -15,7 +15,7 @@ import (
 
 var _ = Describe("Router", func() {
 	var (
-		server *httptest.Server
+		server    *httptest.Server
 		fakeBooks *internal.FakeBooks
 	)
 

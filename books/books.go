@@ -16,7 +16,7 @@ func IsNotFound(err error) bool {
 	return errors.As(err, &e)
 }
 
-type NotFoundError struct {}
+type NotFoundError struct{}
 
 func (err NotFoundError) Error() string {
 	return "not found"
