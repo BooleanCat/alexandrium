@@ -15,5 +15,11 @@ func (_ *Books) ByISBN(isbn string) (books.Book, error) {
 var _ books.Books = new(Books)
 
 var data = map[string]books.Book{
-	"9781788547383": {ISBN: "9781788547383", Name: "Cage of Souls"},
+	"9781788547383": {
+		ID:        "76341e07-911c-44fd-aafa-13b43daf3494",
+		ISBN:      "9781788547383",
+		Name:      "Cage of Souls",
+		Author:    "Adrian Tchaikovsky",
+		Publisher: "Head of Zeus",
+	},
 }

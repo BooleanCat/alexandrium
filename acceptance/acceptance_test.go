@@ -44,7 +44,7 @@ var _ = Describe("Acceptance", func() {
 
 			var book books.Book
 			Expect(json.NewDecoder(response.Body).Decode(&book)).To(Succeed())
-			Expect(book.Name).To(Equal("Cage of Souls"))
+			Expect(book.ID).To(Equal("76341e07-911c-44fd-aafa-13b43daf3494"))
 		})
 	})
 })
