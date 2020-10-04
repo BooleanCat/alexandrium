@@ -29,4 +29,19 @@ var _ = Describe("Memory", func() {
 			})
 		})
 	})
+
+	Describe("ByID", func() {
+		It("returns the correct book for an ID", func() {
+			book, err := memoryBooks.ByID("76341e07-911c-44fd-aafa-13b43daf3494")
+			Expect(err).NotTo(HaveOccurred())
+			Expect(book.ID).To(Equal("76341e07-911c-44fd-aafa-13b43daf3494"))
+		})
+
+		When("a book isn't found", func() {
+			It("returns a NotFound error", func() {
+				_, err := memoryBooks.ByID("not-found")
+				Expect(books.IsNotFound(err)).To(BeTrue())
+			})
+		})
+	})
 })

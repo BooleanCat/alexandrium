@@ -2,9 +2,9 @@ package router
 
 import (
 	"encoding/json"
-	"net/http"
-
+	"fmt"
 	"github.com/go-chi/chi"
+	"net/http"
 
 	"github.com/BooleanCat/alexandrium/books"
 )
@@ -16,8 +16,11 @@ import (
 func New(b books.Books) *chi.Mux {
 	router := chi.NewRouter()
 
+	uuid4Pattern := "[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}"
+
 	router.Get("/ping", HandlePing)
-	router.Get("/books/{isbn}", HandleBooksByISBN(b))
+	router.Get(fmt.Sprintf("/books/{id:%s}", uuid4Pattern), HandleGetBook(b))
+	router.Get("/books/{isbn}", HandleGetBookByISBN(b))
 
 	return router
 }
@@ -27,22 +30,33 @@ func HandlePing(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// HandleBooksByISBN responds with a book by ISBN
-func HandleBooksByISBN(b books.Books) func(http.ResponseWriter, *http.Request) {
+// HandleGetBook responds with a book by ISBN
+func HandleGetBook(b books.Books) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := chi.URLParam(r, "id")
+		handleFindBook(b.ByID, id, w)
+	}
+}
+
+// HandleGetBookByISBN responds with a book by ISBN
+func HandleGetBookByISBN(b books.Books) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		isbn := chi.URLParam(r, "isbn")
+		handleFindBook(b.ByISBN, isbn, w)
+	}
+}
 
-		book, err := b.ByISBN(isbn)
-		if books.IsNotFound(err) {
-			w.WriteHeader(http.StatusNotFound)
-			return
-		} else if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
+func handleFindBook(finder func(string) (books.Book, error), key string, w http.ResponseWriter) {
+	book, err := finder(key)
+	if books.IsNotFound(err) {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	} else if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
-		if err := json.NewEncoder(w).Encode(&book); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-		}
+	if err := json.NewEncoder(w).Encode(&book); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 }

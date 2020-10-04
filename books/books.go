@@ -4,6 +4,7 @@ import "errors"
 
 type Books interface {
 	ByISBN(string) (Book, error)
+	ByID(string) (Book, error)
 }
 
 type Book struct {
