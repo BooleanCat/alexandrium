@@ -19,7 +19,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:    ":3000",
-		Handler: router.New(new(memory.BookStore)),
+		Handler: router.New(new(memory.BookStore), new(memory.AuthorStore)),
 	}
 
 	go func() {

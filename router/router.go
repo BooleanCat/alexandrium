@@ -12,10 +12,11 @@ import (
 )
 
 //go:generate go run github.com/maxbrunsfeld/counterfeiter/v6 -generate
-//counterfeiter:generate -o ./internal/fake_books.go github.com/BooleanCat/alexandrium/books.Books
+//counterfeiter:generate -o ./internal/fake_books.go github.com/BooleanCat/alexandrium/store.Books
+//counterfeiter:generate -o ./internal/fake_authors.go github.com/BooleanCat/alexandrium/store.Authors
 
 // New creates alexandrium's HTTP router.
-func New(books store.Books) *chi.Mux {
+func New(books store.Books, authors store.Authors) *chi.Mux {
 	router := chi.NewRouter()
 
 	uuid4Pattern := "[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}"
@@ -26,6 +27,8 @@ func New(books store.Books) *chi.Mux {
 		r.Get(fmt.Sprintf("/{id:%s}", uuid4Pattern), HandleGetBook(books))
 		r.Get("/{isbn}", HandleGetBookByISBN(books))
 	})
+
+	router.Get(fmt.Sprintf("/authors/{id:%s}", uuid4Pattern), HandleGetAuthor(authors))
 
 	return router
 }
@@ -48,6 +51,25 @@ func HandleGetBookByISBN(books store.Books) func(http.ResponseWriter, *http.Requ
 	return func(w http.ResponseWriter, r *http.Request) {
 		isbn := chi.URLParam(r, "isbn")
 		handleFindBook(books.ByISBN, isbn, w)
+	}
+}
+
+func HandleGetAuthor(authors store.Authors) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := chi.URLParam(r, "id")
+
+		author, err := authors.ByID(id)
+		if store.IsNotFound(err) {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		if err := json.NewEncoder(w).Encode(&author); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 	}
 }
 

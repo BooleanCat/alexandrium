@@ -8,7 +8,7 @@ import (
 type BookStore struct{}
 
 func (_ *BookStore) ByISBN(isbn string) (types.Book, error) {
-	for _, book := range data {
+	for _, book := range bookData {
 		if book.ISBN == isbn {
 			return book, nil
 		}
@@ -18,7 +18,7 @@ func (_ *BookStore) ByISBN(isbn string) (types.Book, error) {
 }
 
 func (_ *BookStore) ByID(id string) (types.Book, error) {
-	for _, book := range data {
+	for _, book := range bookData {
 		if book.ID == id {
 			return book, nil
 		}
@@ -29,12 +29,12 @@ func (_ *BookStore) ByID(id string) (types.Book, error) {
 
 var _ store.Books = new(BookStore)
 
-var data = []types.Book{
+var bookData = []types.Book{
 	{
 		ID:        "76341e07-911c-44fd-aafa-13b43daf3494",
 		ISBN:      "9781788547383",
 		Name:      "Cage of Souls",
-		Author:    "Adrian Tchaikovsky",
+		Authors:   []string{"ea1ff7d7-67cd-477c-8cb7-8756619e275d"},
 		Publisher: "Head of Zeus",
 	},
 }

@@ -11,6 +11,10 @@ type Books interface {
 	ByID(string) (types.Book, error)
 }
 
+type Authors interface {
+	ByID(string) (types.Author, error)
+}
+
 func IsNotFound(err error) bool {
 	var e NotFoundError
 	return errors.As(err, &e)

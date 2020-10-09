@@ -17,13 +17,15 @@ import (
 
 var _ = Describe("Router", func() {
 	var (
-		server    *httptest.Server
-		fakeBooks *internal.FakeBooks
+		server      *httptest.Server
+		fakeBooks   *internal.FakeBooks
+		fakeAuthors *internal.FakeAuthors
 	)
 
 	BeforeEach(func() {
 		fakeBooks = new(internal.FakeBooks)
-		server = httptest.NewServer(router.New(fakeBooks))
+		fakeAuthors = new(internal.FakeAuthors)
+		server = httptest.NewServer(router.New(fakeBooks, fakeAuthors))
 	})
 
 	AfterEach(func() {
@@ -143,7 +145,7 @@ var _ = Describe("Router", func() {
 					Expect(response.StatusCode).To(Equal(http.StatusNotFound))
 				})
 
-				By("having searched by ISBN", func() {
+				By("having searched by ID", func() {
 					Expect(fakeBooks.ByIDCallCount()).To(Equal(1))
 				})
 			})
@@ -159,8 +161,72 @@ var _ = Describe("Router", func() {
 					Expect(response.StatusCode).To(Equal(http.StatusInternalServerError))
 				})
 
-				By("having searched by ISBN", func() {
+				By("having searched by ID", func() {
 					Expect(fakeBooks.ByIDCallCount()).To(Equal(1))
+				})
+			})
+		})
+	})
+
+	Describe("/authors/{id}", func() {
+		var response *http.Response
+
+		BeforeEach(func() {
+			fakeAuthors.ByIDReturns(types.Author{ID: "ea1ff7d7-67cd-477c-8cb7-8756619e275d"}, nil)
+		})
+
+		JustBeforeEach(func() {
+			response = httpGet(server.URL + "/authors/ea1ff7d7-67cd-477c-8cb7-8756619e275d")
+		})
+
+		AfterEach(func() {
+			Expect(response.Body.Close()).To(Succeed())
+		})
+
+		It("responds", func() {
+			By("having status code 200 OK", func() {
+				Expect(response.StatusCode).To(Equal(http.StatusOK))
+			})
+
+			By("having searched by ID", func() {
+				Expect(fakeAuthors.ByIDCallCount()).To(Equal(1))
+			})
+
+			By("delivering the author in the response body", func() {
+				var author types.Author
+				Expect(json.NewDecoder(response.Body).Decode(&author)).To(Succeed())
+				Expect(author.ID).To(Equal("ea1ff7d7-67cd-477c-8cb7-8756619e275d"))
+			})
+		})
+
+		When("the author isn't found", func() {
+			BeforeEach(func() {
+				fakeAuthors.ByIDReturns(types.Author{}, store.NotFoundError{})
+			})
+
+			It("responds", func() {
+				By("having status code 404 Not Found", func() {
+					Expect(response.StatusCode).To(Equal(http.StatusNotFound))
+				})
+
+				By("having searched by ID", func() {
+					Expect(fakeAuthors.ByIDCallCount()).To(Equal(1))
+				})
+			})
+		})
+
+		When("searching by ID fails", func() {
+			BeforeEach(func() {
+				fakeAuthors.ByIDReturns(types.Author{}, errors.New("oops"))
+			})
+
+			It("responds", func() {
+				By("having status code 500 Internal Server Error", func() {
+					Expect(response.StatusCode).To(Equal(http.StatusInternalServerError))
+				})
+
+				By("having searched by ID", func() {
+					Expect(fakeAuthors.ByIDCallCount()).To(Equal(1))
 				})
 			})
 		})

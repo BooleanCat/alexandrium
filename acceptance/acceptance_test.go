@@ -39,7 +39,13 @@ var _ = Describe("Acceptance", func() {
 
 			var book types.Book
 			Expect(json.NewDecoder(response.Body).Decode(&book)).To(Succeed())
-			Expect(book.Name).To(Equal("Cage of Souls"))
+			Expect(book).To(Equal(types.Book{
+				ID:        "76341e07-911c-44fd-aafa-13b43daf3494",
+				ISBN:      "9781788547383",
+				Name:      "Cage of Souls",
+				Publisher: "Head of Zeus",
+				Authors:   []string{"ea1ff7d7-67cd-477c-8cb7-8756619e275d"},
+			}))
 		})
 	})
 
@@ -52,7 +58,27 @@ var _ = Describe("Acceptance", func() {
 
 			var book types.Book
 			Expect(json.NewDecoder(response.Body).Decode(&book)).To(Succeed())
-			Expect(book.Name).To(Equal("Cage of Souls"))
+			Expect(book).To(Equal(types.Book{
+				ID:        "76341e07-911c-44fd-aafa-13b43daf3494",
+				ISBN:      "9781788547383",
+				Name:      "Cage of Souls",
+				Publisher: "Head of Zeus",
+				Authors:   []string{"ea1ff7d7-67cd-477c-8cb7-8756619e275d"},
+			}))
+		})
+	})
+
+	Describe("GET /authors/ea1ff7d7-67cd-477c-8cb7-8756619e275d", func() {
+		It("responds with the correct author data by Alexandrium ID", func() {
+			response := httpGet(serverAddress + "/authors/ea1ff7d7-67cd-477c-8cb7-8756619e275d")
+			defer closeIgnoreError(response.Body)
+
+			var author types.Author
+			Expect(json.NewDecoder(response.Body).Decode(&author)).To(Succeed())
+			Expect(author).To(Equal(types.Author{
+				ID:   "ea1ff7d7-67cd-477c-8cb7-8756619e275d",
+				Name: "Adrian Tchaikovsky",
+			}))
 		})
 	})
 })
