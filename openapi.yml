@@ -1,0 +1,78 @@
+---
+openapi: 3.0.0
+info:
+  title: Alexandrium
+  version: 0.1.0
+paths:
+  /books/{id}:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: string}
+        examples:
+          ISBN13: {value: 9781788547383}
+          UUID4: {value: 76341e07-911c-44fd-aafa-13b43daf3494}
+      responses:
+        200:
+          description: Successfully returned a book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: {type: string}
+                  isbn: {type: string}
+                  name: {type: string}
+                  publisher: {type: string}
+                  authors:
+                    type: array
+                    items: {type: string}
+                example:
+                  id: 76341e07-911c-44fd-aafa-13b43daf3494
+                  isbn: "9781788547383"
+                  name: Cage of Souls
+                  publisher: Head of Zeus
+                  authors: [ea1ff7d7-67cd-477c-8cb7-8756619e275d]
+        400:
+          description: Book ID was not an ISBN13 or a UUID4
+          content:
+            application/json:
+              schema: {type: object}
+        404:
+          description: Book was not found
+          content:
+            application/json:
+              schema: {type: object}
+  /authors/{id}:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: string}
+        example: ea1ff7d7-67cd-477c-8cb7-8756619e275d
+      responses:
+        200:
+          description: Successfully returned an author
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: {type: string}
+                  name: {type: string}
+                example:
+                  id: ea1ff7d7-67cd-477c-8cb7-8756619e275d
+                  name: Adrian Tchaikovsky
+        400:
+          description: Author ID was not a UUID
+          content:
+            application/json:
+              schema: {type: object}
+        404:
+          description: Author was not found
+          content:
+            application/json:
+              schema: {type: object}
