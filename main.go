@@ -9,8 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/BooleanCat/alexandrium/books/memory"
 	"github.com/BooleanCat/alexandrium/router"
+	"github.com/BooleanCat/alexandrium/store/memory"
 )
 
 func main() {
@@ -19,7 +19,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:    ":3000",
-		Handler: router.New(new(memory.Books)),
+		Handler: router.New(new(memory.BookStore)),
 	}
 
 	go func() {

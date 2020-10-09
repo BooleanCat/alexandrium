@@ -4,7 +4,7 @@ package internal
 import (
 	"sync"
 
-	"github.com/BooleanCat/alexandrium/books"
+	"github.com/BooleanCat/alexandrium/store"
 	"github.com/BooleanCat/alexandrium/types"
 )
 
@@ -191,4 +191,4 @@ func (fake *FakeBooks) recordInvocation(key string, args []interface{}) {
 	fake.invocations[key] = append(fake.invocations[key], args)
 }
 
-var _ books.Books = new(FakeBooks)
+var _ store.Books = new(FakeBooks)

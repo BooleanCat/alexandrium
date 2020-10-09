@@ -1,33 +1,33 @@
 package memory
 
 import (
-	"github.com/BooleanCat/alexandrium/books"
+	"github.com/BooleanCat/alexandrium/store"
 	"github.com/BooleanCat/alexandrium/types"
 )
 
-type Books struct{}
+type BookStore struct{}
 
-func (_ *Books) ByISBN(isbn string) (types.Book, error) {
+func (_ *BookStore) ByISBN(isbn string) (types.Book, error) {
 	for _, book := range data {
 		if book.ISBN == isbn {
 			return book, nil
 		}
 	}
 
-	return types.Book{}, books.NotFoundError{}
+	return types.Book{}, store.NotFoundError{}
 }
 
-func (_ *Books) ByID(id string) (types.Book, error) {
+func (_ *BookStore) ByID(id string) (types.Book, error) {
 	for _, book := range data {
 		if book.ID == id {
 			return book, nil
 		}
 	}
 
-	return types.Book{}, books.NotFoundError{}
+	return types.Book{}, store.NotFoundError{}
 }
 
-var _ books.Books = new(Books)
+var _ store.Books = new(BookStore)
 
 var data = []types.Book{
 	{

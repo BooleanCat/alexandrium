@@ -9,9 +9,9 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/BooleanCat/alexandrium/books"
 	"github.com/BooleanCat/alexandrium/router"
 	"github.com/BooleanCat/alexandrium/router/internal"
+	"github.com/BooleanCat/alexandrium/store"
 	"github.com/BooleanCat/alexandrium/types"
 )
 
@@ -71,7 +71,7 @@ var _ = Describe("Router", func() {
 
 		When("the book isn't found", func() {
 			BeforeEach(func() {
-				fakeBooks.ByISBNReturns(types.Book{}, books.NotFoundError{})
+				fakeBooks.ByISBNReturns(types.Book{}, store.NotFoundError{})
 			})
 
 			It("responds", func() {
@@ -135,7 +135,7 @@ var _ = Describe("Router", func() {
 
 		When("the book isn't found", func() {
 			BeforeEach(func() {
-				fakeBooks.ByIDReturns(types.Book{}, books.NotFoundError{})
+				fakeBooks.ByIDReturns(types.Book{}, store.NotFoundError{})
 			})
 
 			It("responds", func() {
