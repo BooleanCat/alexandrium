@@ -8,7 +8,6 @@ import (
 	"github.com/go-chi/chi"
 
 	"github.com/BooleanCat/alexandrium/store"
-	"github.com/BooleanCat/alexandrium/types"
 )
 
 //go:generate go run github.com/maxbrunsfeld/counterfeiter/v6 -generate
@@ -42,7 +41,21 @@ func HandlePing(w http.ResponseWriter, _ *http.Request) {
 func HandleGetBook(books store.Books) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "id")
-		handleFindBook(books.ByID, id, w)
+
+		w.Header().Set("Content-Type", "application/json")
+
+		book, err := books.ByID(id)
+		if store.IsNotFound(err) {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		if err := json.NewEncoder(w).Encode(&book); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 	}
 }
 
@@ -50,13 +63,29 @@ func HandleGetBook(books store.Books) func(http.ResponseWriter, *http.Request) {
 func HandleGetBookByISBN(books store.Books) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		isbn := chi.URLParam(r, "isbn")
-		handleFindBook(books.ByISBN, isbn, w)
+
+		w.Header().Set("Content-Type", "application/json")
+
+		book, err := books.ByISBN(isbn)
+		if store.IsNotFound(err) {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		if err := json.NewEncoder(w).Encode(&book); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 	}
 }
 
 func HandleGetAuthor(authors store.Authors) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "id")
+
+		w.Header().Set("Content-Type", "application/json")
 
 		author, err := authors.ByID(id)
 		if store.IsNotFound(err) {
@@ -70,20 +99,5 @@ func HandleGetAuthor(authors store.Authors) func(http.ResponseWriter, *http.Requ
 		if err := json.NewEncoder(w).Encode(&author); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
-	}
-}
-
-func handleFindBook(finder func(string) (types.Book, error), key string, w http.ResponseWriter) {
-	book, err := finder(key)
-	if store.IsNotFound(err) {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	} else if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	if err := json.NewEncoder(w).Encode(&book); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
 	}
 }

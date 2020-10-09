@@ -60,6 +60,10 @@ var _ = Describe("Router", func() {
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
 
+			By("having the correct Content-Type", func() {
+				Expect(response.Header.Get("Content-Type")).To(Equal("application/json"))
+			})
+
 			By("having searched by ISBN", func() {
 				Expect(fakeBooks.ByISBNCallCount()).To(Equal(1))
 			})
@@ -81,6 +85,10 @@ var _ = Describe("Router", func() {
 					Expect(response.StatusCode).To(Equal(http.StatusNotFound))
 				})
 
+				By("having the correct Content-Type", func() {
+					Expect(response.Header.Get("Content-Type")).To(Equal("application/json"))
+				})
+
 				By("having searched by ISBN", func() {
 					Expect(fakeBooks.ByISBNCallCount()).To(Equal(1))
 				})
@@ -95,6 +103,10 @@ var _ = Describe("Router", func() {
 			It("responds", func() {
 				By("having status code 500 Internal Server Error", func() {
 					Expect(response.StatusCode).To(Equal(http.StatusInternalServerError))
+				})
+
+				By("having the correct Content-Type", func() {
+					Expect(response.Header.Get("Content-Type")).To(Equal("application/json"))
 				})
 
 				By("having searched by ISBN", func() {
@@ -124,6 +136,10 @@ var _ = Describe("Router", func() {
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
 
+			By("having the correct Content-Type", func() {
+				Expect(response.Header.Get("Content-Type")).To(Equal("application/json"))
+			})
+
 			By("having searched by ISBN", func() {
 				Expect(fakeBooks.ByIDCallCount()).To(Equal(1))
 			})
@@ -145,6 +161,10 @@ var _ = Describe("Router", func() {
 					Expect(response.StatusCode).To(Equal(http.StatusNotFound))
 				})
 
+				By("having the correct Content-Type", func() {
+					Expect(response.Header.Get("Content-Type")).To(Equal("application/json"))
+				})
+
 				By("having searched by ID", func() {
 					Expect(fakeBooks.ByIDCallCount()).To(Equal(1))
 				})
@@ -159,6 +179,10 @@ var _ = Describe("Router", func() {
 			It("responds", func() {
 				By("having status code 500 Internal Server Error", func() {
 					Expect(response.StatusCode).To(Equal(http.StatusInternalServerError))
+				})
+
+				By("having the correct Content-Type", func() {
+					Expect(response.Header.Get("Content-Type")).To(Equal("application/json"))
 				})
 
 				By("having searched by ID", func() {
@@ -188,6 +212,10 @@ var _ = Describe("Router", func() {
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
 
+			By("having the correct Content-Type", func() {
+				Expect(response.Header.Get("Content-Type")).To(Equal("application/json"))
+			})
+
 			By("having searched by ID", func() {
 				Expect(fakeAuthors.ByIDCallCount()).To(Equal(1))
 			})
@@ -209,6 +237,10 @@ var _ = Describe("Router", func() {
 					Expect(response.StatusCode).To(Equal(http.StatusNotFound))
 				})
 
+				By("having the correct Content-Type", func() {
+					Expect(response.Header.Get("Content-Type")).To(Equal("application/json"))
+				})
+
 				By("having searched by ID", func() {
 					Expect(fakeAuthors.ByIDCallCount()).To(Equal(1))
 				})
@@ -223,6 +255,10 @@ var _ = Describe("Router", func() {
 			It("responds", func() {
 				By("having status code 500 Internal Server Error", func() {
 					Expect(response.StatusCode).To(Equal(http.StatusInternalServerError))
+				})
+
+				By("having the correct Content-Type", func() {
+					Expect(response.Header.Get("Content-Type")).To(Equal("application/json"))
 				})
 
 				By("having searched by ID", func() {
