@@ -11,7 +11,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/BooleanCat/alexandrium/books"
+	"github.com/BooleanCat/alexandrium/types"
 )
 
 var _ = Describe("Acceptance", func() {
@@ -42,7 +42,7 @@ var _ = Describe("Acceptance", func() {
 
 			Expect(response.StatusCode).To(Equal(http.StatusOK))
 
-			var book books.Book
+			var book types.Book
 			Expect(json.NewDecoder(response.Body).Decode(&book)).To(Succeed())
 			Expect(book.ID).To(Equal("76341e07-911c-44fd-aafa-13b43daf3494"))
 		})

@@ -1,18 +1,14 @@
 package books
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/BooleanCat/alexandrium/types"
+)
 
 type Books interface {
-	ByISBN(string) (Book, error)
-	ByID(string) (Book, error)
-}
-
-type Book struct {
-	ID        string `json:"id"`
-	ISBN      string `json:"isbn"`
-	Name      string `json:"name"`
-	Publisher string `json:"publisher"`
-	Author    string `json:"author"`
+	ByISBN(string) (types.Book, error)
+	ByID(string) (types.Book, error)
 }
 
 func IsNotFound(err error) bool {

@@ -3,10 +3,12 @@ package router
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/chi"
 	"net/http"
 
+	"github.com/go-chi/chi"
+
 	"github.com/BooleanCat/alexandrium/books"
+	"github.com/BooleanCat/alexandrium/types"
 )
 
 //go:generate go run github.com/maxbrunsfeld/counterfeiter/v6 -generate
@@ -46,7 +48,7 @@ func HandleGetBookByISBN(b books.Books) func(http.ResponseWriter, *http.Request)
 	}
 }
 
-func handleFindBook(finder func(string) (books.Book, error), key string, w http.ResponseWriter) {
+func handleFindBook(finder func(string) (types.Book, error), key string, w http.ResponseWriter) {
 	book, err := finder(key)
 	if books.IsNotFound(err) {
 		w.WriteHeader(http.StatusNotFound)

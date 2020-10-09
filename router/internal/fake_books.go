@@ -5,40 +5,41 @@ import (
 	"sync"
 
 	"github.com/BooleanCat/alexandrium/books"
+	"github.com/BooleanCat/alexandrium/types"
 )
 
 type FakeBooks struct {
-	ByIDStub        func(string) (books.Book, error)
+	ByIDStub        func(string) (types.Book, error)
 	byIDMutex       sync.RWMutex
 	byIDArgsForCall []struct {
 		arg1 string
 	}
 	byIDReturns struct {
-		result1 books.Book
+		result1 types.Book
 		result2 error
 	}
 	byIDReturnsOnCall map[int]struct {
-		result1 books.Book
+		result1 types.Book
 		result2 error
 	}
-	ByISBNStub        func(string) (books.Book, error)
+	ByISBNStub        func(string) (types.Book, error)
 	byISBNMutex       sync.RWMutex
 	byISBNArgsForCall []struct {
 		arg1 string
 	}
 	byISBNReturns struct {
-		result1 books.Book
+		result1 types.Book
 		result2 error
 	}
 	byISBNReturnsOnCall map[int]struct {
-		result1 books.Book
+		result1 types.Book
 		result2 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeBooks) ByID(arg1 string) (books.Book, error) {
+func (fake *FakeBooks) ByID(arg1 string) (types.Book, error) {
 	fake.byIDMutex.Lock()
 	ret, specificReturn := fake.byIDReturnsOnCall[len(fake.byIDArgsForCall)]
 	fake.byIDArgsForCall = append(fake.byIDArgsForCall, struct {
@@ -62,7 +63,7 @@ func (fake *FakeBooks) ByIDCallCount() int {
 	return len(fake.byIDArgsForCall)
 }
 
-func (fake *FakeBooks) ByIDCalls(stub func(string) (books.Book, error)) {
+func (fake *FakeBooks) ByIDCalls(stub func(string) (types.Book, error)) {
 	fake.byIDMutex.Lock()
 	defer fake.byIDMutex.Unlock()
 	fake.ByIDStub = stub
@@ -75,33 +76,33 @@ func (fake *FakeBooks) ByIDArgsForCall(i int) string {
 	return argsForCall.arg1
 }
 
-func (fake *FakeBooks) ByIDReturns(result1 books.Book, result2 error) {
+func (fake *FakeBooks) ByIDReturns(result1 types.Book, result2 error) {
 	fake.byIDMutex.Lock()
 	defer fake.byIDMutex.Unlock()
 	fake.ByIDStub = nil
 	fake.byIDReturns = struct {
-		result1 books.Book
+		result1 types.Book
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeBooks) ByIDReturnsOnCall(i int, result1 books.Book, result2 error) {
+func (fake *FakeBooks) ByIDReturnsOnCall(i int, result1 types.Book, result2 error) {
 	fake.byIDMutex.Lock()
 	defer fake.byIDMutex.Unlock()
 	fake.ByIDStub = nil
 	if fake.byIDReturnsOnCall == nil {
 		fake.byIDReturnsOnCall = make(map[int]struct {
-			result1 books.Book
+			result1 types.Book
 			result2 error
 		})
 	}
 	fake.byIDReturnsOnCall[i] = struct {
-		result1 books.Book
+		result1 types.Book
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeBooks) ByISBN(arg1 string) (books.Book, error) {
+func (fake *FakeBooks) ByISBN(arg1 string) (types.Book, error) {
 	fake.byISBNMutex.Lock()
 	ret, specificReturn := fake.byISBNReturnsOnCall[len(fake.byISBNArgsForCall)]
 	fake.byISBNArgsForCall = append(fake.byISBNArgsForCall, struct {
@@ -125,7 +126,7 @@ func (fake *FakeBooks) ByISBNCallCount() int {
 	return len(fake.byISBNArgsForCall)
 }
 
-func (fake *FakeBooks) ByISBNCalls(stub func(string) (books.Book, error)) {
+func (fake *FakeBooks) ByISBNCalls(stub func(string) (types.Book, error)) {
 	fake.byISBNMutex.Lock()
 	defer fake.byISBNMutex.Unlock()
 	fake.ByISBNStub = stub
@@ -138,28 +139,28 @@ func (fake *FakeBooks) ByISBNArgsForCall(i int) string {
 	return argsForCall.arg1
 }
 
-func (fake *FakeBooks) ByISBNReturns(result1 books.Book, result2 error) {
+func (fake *FakeBooks) ByISBNReturns(result1 types.Book, result2 error) {
 	fake.byISBNMutex.Lock()
 	defer fake.byISBNMutex.Unlock()
 	fake.ByISBNStub = nil
 	fake.byISBNReturns = struct {
-		result1 books.Book
+		result1 types.Book
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeBooks) ByISBNReturnsOnCall(i int, result1 books.Book, result2 error) {
+func (fake *FakeBooks) ByISBNReturnsOnCall(i int, result1 types.Book, result2 error) {
 	fake.byISBNMutex.Lock()
 	defer fake.byISBNMutex.Unlock()
 	fake.ByISBNStub = nil
 	if fake.byISBNReturnsOnCall == nil {
 		fake.byISBNReturnsOnCall = make(map[int]struct {
-			result1 books.Book
+			result1 types.Book
 			result2 error
 		})
 	}
 	fake.byISBNReturnsOnCall[i] = struct {
-		result1 books.Book
+		result1 types.Book
 		result2 error
 	}{result1, result2}
 }

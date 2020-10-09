@@ -12,6 +12,7 @@ import (
 	"github.com/BooleanCat/alexandrium/books"
 	"github.com/BooleanCat/alexandrium/router"
 	"github.com/BooleanCat/alexandrium/router/internal"
+	"github.com/BooleanCat/alexandrium/types"
 )
 
 var _ = Describe("Router", func() {
@@ -41,7 +42,7 @@ var _ = Describe("Router", func() {
 		var response *http.Response
 
 		BeforeEach(func() {
-			fakeBooks.ByISBNReturns(books.Book{ISBN: "9781788547383"}, nil)
+			fakeBooks.ByISBNReturns(types.Book{ISBN: "9781788547383"}, nil)
 		})
 
 		JustBeforeEach(func() {
@@ -62,7 +63,7 @@ var _ = Describe("Router", func() {
 			})
 
 			By("delivering the book in the response body", func() {
-				var book books.Book
+				var book types.Book
 				Expect(json.NewDecoder(response.Body).Decode(&book)).To(Succeed())
 				Expect(book.ISBN).To(Equal("9781788547383"))
 			})
@@ -70,7 +71,7 @@ var _ = Describe("Router", func() {
 
 		When("the book isn't found", func() {
 			BeforeEach(func() {
-				fakeBooks.ByISBNReturns(books.Book{}, books.NotFoundError{})
+				fakeBooks.ByISBNReturns(types.Book{}, books.NotFoundError{})
 			})
 
 			It("responds", func() {
@@ -86,7 +87,7 @@ var _ = Describe("Router", func() {
 
 		When("searching by ISBN fails", func() {
 			BeforeEach(func() {
-				fakeBooks.ByISBNReturns(books.Book{}, errors.New("oops"))
+				fakeBooks.ByISBNReturns(types.Book{}, errors.New("oops"))
 			})
 
 			It("responds", func() {
@@ -105,7 +106,7 @@ var _ = Describe("Router", func() {
 		var response *http.Response
 
 		BeforeEach(func() {
-			fakeBooks.ByIDReturns(books.Book{ID: "76341e07-911c-44fd-aafa-13b43daf3494"}, nil)
+			fakeBooks.ByIDReturns(types.Book{ID: "76341e07-911c-44fd-aafa-13b43daf3494"}, nil)
 		})
 
 		JustBeforeEach(func() {
@@ -126,7 +127,7 @@ var _ = Describe("Router", func() {
 			})
 
 			By("delivering the book in the response body", func() {
-				var book books.Book
+				var book types.Book
 				Expect(json.NewDecoder(response.Body).Decode(&book)).To(Succeed())
 				Expect(book.ID).To(Equal("76341e07-911c-44fd-aafa-13b43daf3494"))
 			})
@@ -134,7 +135,7 @@ var _ = Describe("Router", func() {
 
 		When("the book isn't found", func() {
 			BeforeEach(func() {
-				fakeBooks.ByIDReturns(books.Book{}, books.NotFoundError{})
+				fakeBooks.ByIDReturns(types.Book{}, books.NotFoundError{})
 			})
 
 			It("responds", func() {
@@ -150,7 +151,7 @@ var _ = Describe("Router", func() {
 
 		When("searching by ID fails", func() {
 			BeforeEach(func() {
-				fakeBooks.ByIDReturns(books.Book{}, errors.New("oops"))
+				fakeBooks.ByIDReturns(types.Book{}, errors.New("oops"))
 			})
 
 			It("responds", func() {
